@@ -38,8 +38,15 @@ public class Main {
      * @return whether the string satisfies the password requirements
      */
     public static boolean checkForPassword(String str, int minLength) {
-        final boolean propertyOne = Pattern.matches("REPLACE WITH CORRECT REGEX", str);
-        // as needed, modify this code.
+        if (str == null) {
+            return false;
+        }
+
+        // 至少一个小写、一个大写、一个数字，长度至少 minLength
+        final String regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).{"
+                + minLength + ",}$";
+
+        final boolean propertyOne = Pattern.matches(regex, str);
         return propertyOne;
     }
 
@@ -55,15 +62,25 @@ public class Main {
      * @return a list containing the email addresses in the string.
      */
     public static List<String> extractEmails(String str) {
-        final Pattern pattern = Pattern.compile("REPLACE WITH CORRECT REGEX");
+        if (str == null) {
+            return new ArrayList<>();
+        }
+
+        // 匹配形如 aaa@mail.utoronto.ca 或 bbb@utoronto.ca 的邮箱
+        final Pattern pattern = Pattern.compile(
+                "[A-Za-z0-9._%+-]+@(mail\\.utoronto\\.ca|utoronto\\.ca)"
+        );
+
         final Matcher matcher = pattern.matcher(str);
         final List<String> result = new ArrayList<>();
+
         while (matcher.find()) {
+            // group() 返回整个匹配到的邮箱
             result.add(matcher.group());
         }
+
         return result;
     }
-
     // Method 3 for checking if a string conforms to a regex: using String.matches
 
     // TODO: Modify this method to check whether or not the string contains the same capital letter
@@ -76,6 +93,11 @@ public class Main {
      * @return whether str contains the same capital letter twice.
      */
     public static boolean checkForDoubles(String str) {
-        return str.matches("replace with correct regex");
+        if (str == null) {
+            return false;
+        }
+
+        // 至少有一个大写字母，并且该大写字母在后面再次出现
+        return str.matches(".*([A-Z]).*\\1.*");
     }
 }
